@@ -16,40 +16,54 @@ import { Type } from 'class-transformer';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
-@Entity('examples')
-export class Example extends BaseEntity {
+@Entity('users')
+export class User extends BaseEntity {
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  title: string;
+  firstname: string;
 
   @ApiModelPropertyOptional()
-  @IsOptional({ always: true })
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  description: string;
+  lastname: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'simple-array' })
-  actions: string[];
+  @Column({ type: 'varchar' })
+  email: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
-  @Column()
-  created_by_id: string;
+  @Column({ type: 'varchar' })
+  password: string;
 
   @ApiModelPropertyOptional()
-  @IsOptional({ always: true })
-  @Column({ type: 'json', nullable: true })
-  meta_created_by: any;
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
+  @Column({ type: 'varchar' })
+  phone: string;
 
   @ApiModelPropertyOptional()
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
+  @Column({ type: 'varchar' })
+  role: string;
+
+  @ApiModelPropertyOptional()
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
+  @Column({ type: 'varchar' })
+  token: string;
+
+  @ApiModelPropertyOptional( { example: new Date() })
   @IsOptional({ always: true })
-  @Column({ type: 'json', nullable: true })
-  meta: any;
+  @Column({ type: 'timestamp', nullable: true })
+  token_expired: Date;
 
   @BeforeInsert()
   protected beforeInsert(): void {

@@ -27,18 +27,18 @@ export function SwaggerBuilder(
 
   const result = SwaggerModule.createDocument(app, option);
 
-  for (const key of Object.keys(result.paths)) {
-    for (const keyMethod of Object.keys(result.paths[key])) {
-      if (result.paths[key][keyMethod].parameters && Array.isArray(result.paths[key][keyMethod].parameters)) {
-        result.paths[key][keyMethod].parameters.push({
-          type: 'string',
-          name: 'realm',
-          required: true,
-          in: 'header',
-        });
-      }
-    }
-  }
+  // for (const key of Object.keys(result.paths)) {
+  //   for (const keyMethod of Object.keys(result.paths[key])) {
+  //     if (result.paths[key][keyMethod].parameters && Array.isArray(result.paths[key][keyMethod].parameters)) {
+  //       result.paths[key][keyMethod].parameters.push({
+  //         type: 'string',
+  //         name: 'realm',
+  //         required: true,
+  //         in: 'header',
+  //       });
+  //     }
+  //   }
+  // }
 
   return result;
 }

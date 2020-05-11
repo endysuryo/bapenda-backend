@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import dotenv = require('dotenv');
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TimeoutInterceptor } from './timeout.interceptor';
-import { ExampleModule } from './example/example.module';
+import { UserModule } from './user/user.module';
 import * as migrations from './migrations/index';
 
 const { parsed } = dotenv.config({
@@ -39,9 +39,9 @@ process.env = { ...process.env, ...parsed };
       cli: {
         migrationsDir: __dirname + '/migrations',
       },
-      migrations: [migrations.InitDB1584697797169],
+      migrations: [migrations.InitDB1589178923634],
     }),
-    ExampleModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
