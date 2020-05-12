@@ -13,6 +13,7 @@ import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty } from 'class-validator';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Type } from 'class-transformer';
+import { Billboard } from '../billboard/billboard.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -41,6 +42,13 @@ export class Customer extends BaseEntity {
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
   npwp: string;
+
+  @OneToMany(
+    () => Billboard,
+    billboard => billboard.customer,
+  )
+  @Type(() => Billboard)
+  billboards: Billboard[];
 
   @BeforeInsert()
   protected beforeInsert(): void {

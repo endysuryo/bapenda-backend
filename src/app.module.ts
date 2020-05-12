@@ -44,7 +44,7 @@ process.env = { ...process.env, ...parsed };
       cli: {
         migrationsDir: __dirname + '/migrations',
       },
-      migrations: [migrations.InitDB1589270647147],
+      migrations: [migrations.InitDB1589295632780],
     }),
     UserModule,
     CustomerModule,

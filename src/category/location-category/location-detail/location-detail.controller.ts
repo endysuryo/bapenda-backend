@@ -15,6 +15,13 @@ import { LocationDetailService } from './location-detail.service';
       primary: true,
     },
   },
+  query: {
+    join: {
+      billboards: {
+        exclude: [],
+      },
+    },
+  },
 })
 @ApiUseTags('Location Details')
 @Controller('locationdetails')

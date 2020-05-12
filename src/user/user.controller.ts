@@ -20,9 +20,6 @@ import { UserService } from './user.service';
       billboards: {
         exclude: [],
       },
-      event_type: {
-        exclude: [],
-      },
     },
   },
 })

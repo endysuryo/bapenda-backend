@@ -13,6 +13,7 @@ import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty } from 'class-validator';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Type } from 'class-transformer';
+import { LocationCategory } from './location-category/location-category.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -23,6 +24,13 @@ export class Category extends BaseEntity {
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
   name: string;
+
+  @OneToMany(
+    () => LocationCategory,
+    locationcategory => locationcategory.category,
+  )
+  @Type(() => LocationCategory)
+  locationcategories: LocationCategory[];
 
   @BeforeInsert()
   protected beforeInsert(): void {

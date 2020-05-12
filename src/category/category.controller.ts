@@ -15,6 +15,13 @@ import { CategoryService } from './category.service';
       primary: true,
     },
   },
+  query: {
+    join: {
+      locationcategories: {
+        exclude: [],
+      },
+    },
+  },
 })
 @ApiUseTags('Categories')
 @Controller('categories')

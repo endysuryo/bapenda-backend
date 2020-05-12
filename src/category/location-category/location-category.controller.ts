@@ -15,6 +15,16 @@ import { LocationCategoryService } from './location-category.service';
       primary: true,
     },
   },
+  query: {
+    join: {
+      locationdetails: {
+        exclude: [],
+      },
+      billboards: {
+        exclude: [],
+      },
+    },
+  },
 })
 @ApiUseTags('Location Categories')
 @Controller('locationcategories')

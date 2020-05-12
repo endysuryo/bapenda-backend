@@ -15,6 +15,13 @@ import { CustomerService } from './customer.service';
       primary: true,
     },
   },
+  query: {
+    join: {
+      billboards: {
+        exclude: [],
+      },
+    },
+  },
 })
 @ApiUseTags('Customers')
 @Controller('customers')
