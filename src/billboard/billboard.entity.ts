@@ -13,65 +13,91 @@ import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty } from 'class-validator';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Type } from 'class-transformer';
-import { Billboard } from '../billboard/billboard.entity';
+import { User } from '../user/user.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
 @Entity('users')
-export class User extends BaseEntity {
+export class Billboard extends BaseEntity {
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  firstname: string;
+  customer_id: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  lastname: string;
+  location_category_id: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  email: string;
+  location_detail_id: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  password: string;
+  billing_id: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  phone: string;
+  skpd_number: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  role: string;
-
-  @ApiModelPropertyOptional()
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  token: string;
+  type: string;
 
   @ApiModelPropertyOptional( { example: new Date() })
   @IsOptional({ always: true })
   @Column({ type: 'timestamp', nullable: true })
-  token_expired: Date;
+  start_at: Date;
 
-  @OneToMany(
-    () => Billboard,
-    billboard => billboard.user,
+  @ApiModelPropertyOptional( { example: new Date() })
+  @IsOptional({ always: true })
+  @Column({ type: 'timestamp', nullable: true })
+  end_at: Date;
+
+  @ApiModelPropertyOptional( { example: new Date() })
+  @IsOptional({ always: true })
+  @Column({ type: 'timestamp', nullable: true })
+  approve_at: Date;
+
+  @ApiModelPropertyOptional()
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
+  @Column({ type: 'float' })
+  size: number;
+
+  @ApiModelPropertyOptional()
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
+  @Column({ type: 'int' })
+  amount: number;
+
+  @ApiModelPropertyOptional()
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
+  @Column({ type: 'varchar' })
+  user_id: string;
+
+  @ManyToOne(
+    () => User,
+    user => user.billboards,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+    },
   )
-  @Type(() => Billboard)
-  billboards: Billboard[];
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @BeforeInsert()
   protected beforeInsert(): void {

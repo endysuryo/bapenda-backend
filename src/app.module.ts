@@ -9,6 +9,11 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TimeoutInterceptor } from './timeout.interceptor';
 import { UserModule } from './user/user.module';
 import * as migrations from './migrations/index';
+import { CustomerModule } from 'customer/customer.module';
+import { BillboardModule } from 'billboard/billboard.module';
+import { CategoryModule } from 'category/category.module';
+import { LocationCategoryModule } from 'category/location-category/location-category.module';
+import { LocationDetailModule } from 'category/location-category/location-detail/location-detail.module';
 
 const { parsed } = dotenv.config({
   path:
@@ -39,9 +44,14 @@ process.env = { ...process.env, ...parsed };
       cli: {
         migrationsDir: __dirname + '/migrations',
       },
-      migrations: [migrations.InitDB1589178923634],
+      migrations: [migrations.InitDB1589270647147],
     }),
     UserModule,
+    CustomerModule,
+    BillboardModule,
+    CategoryModule,
+    LocationCategoryModule,
+    LocationDetailModule,
   ],
   controllers: [AppController],
   providers: [

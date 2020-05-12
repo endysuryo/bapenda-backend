@@ -7,71 +7,46 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { BaseEntity } from '../base.entity';
+import { BaseEntity } from '../../base.entity';
 import uuid = require('uuid');
 import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty } from 'class-validator';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Type } from 'class-transformer';
-import { Billboard } from '../billboard/billboard.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
-@Entity('users')
-export class User extends BaseEntity {
+@Entity('locationcategories')
+export class LocationCategory extends BaseEntity {
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  firstname: string;
+  category_id: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  lastname: string;
+  @Column({ type: 'int' })
+  nsr: number;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  email: string;
-
-  @ApiModelPropertyOptional()
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  password: string;
+  @Column({ type: 'int' })
+  tax: number;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  phone: string;
+  tax_period: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  role: string;
-
-  @ApiModelPropertyOptional()
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  token: string;
-
-  @ApiModelPropertyOptional( { example: new Date() })
-  @IsOptional({ always: true })
-  @Column({ type: 'timestamp', nullable: true })
-  token_expired: Date;
-
-  @OneToMany(
-    () => Billboard,
-    billboard => billboard.user,
-  )
-  @Type(() => Billboard)
-  billboards: Billboard[];
+  information: string;
 
   @BeforeInsert()
   protected beforeInsert(): void {

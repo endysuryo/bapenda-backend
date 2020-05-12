@@ -30,10 +30,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
         }
         let message;
         if (exception.message.message) {
-          console.error(
-            'ERROR FROM EXCEPTION (.message.message)',
-            JSON.stringify(exception),
-          );
+          // console.error(
+          //   'ERROR FROM EXCEPTION (.message.message)',
+          //   JSON.stringify(exception),
+          // );
           message = exception.message.message;
         } else {
           console.error(

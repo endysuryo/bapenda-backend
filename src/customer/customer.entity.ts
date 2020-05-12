@@ -13,35 +13,22 @@ import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty } from 'class-validator';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Type } from 'class-transformer';
-import { Billboard } from '../billboard/billboard.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
-@Entity('users')
-export class User extends BaseEntity {
+@Entity('customers')
+export class Customer extends BaseEntity {
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  firstname: string;
+  name: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  lastname: string;
-
-  @ApiModelPropertyOptional()
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  email: string;
-
-  @ApiModelPropertyOptional()
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  password: string;
+  address: string;
 
   @ApiModelPropertyOptional()
   @IsOptional({ groups: [UPDATE] })
@@ -53,25 +40,7 @@ export class User extends BaseEntity {
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE] })
   @Column({ type: 'varchar' })
-  role: string;
-
-  @ApiModelPropertyOptional()
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE] })
-  @Column({ type: 'varchar' })
-  token: string;
-
-  @ApiModelPropertyOptional( { example: new Date() })
-  @IsOptional({ always: true })
-  @Column({ type: 'timestamp', nullable: true })
-  token_expired: Date;
-
-  @OneToMany(
-    () => Billboard,
-    billboard => billboard.user,
-  )
-  @Type(() => Billboard)
-  billboards: Billboard[];
+  npwp: string;
 
   @BeforeInsert()
   protected beforeInsert(): void {

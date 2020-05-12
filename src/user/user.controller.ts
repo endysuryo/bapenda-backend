@@ -15,6 +15,16 @@ import { UserService } from './user.service';
       primary: true,
     },
   },
+  query: {
+    join: {
+      billboards: {
+        exclude: [],
+      },
+      event_type: {
+        exclude: [],
+      },
+    },
+  },
 })
 @ApiUseTags('Users')
 @Controller('users')
