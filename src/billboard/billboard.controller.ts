@@ -15,6 +15,13 @@ import { BillboardService } from './billboard.service';
       primary: true,
     },
   },
+  query: {
+    join: {
+      customer_billboards: {
+        exclude: [],
+      },
+    },
+  },
 })
 @ApiUseTags('Billboards')
 @Controller('billboards')

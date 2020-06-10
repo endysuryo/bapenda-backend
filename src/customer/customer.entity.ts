@@ -13,7 +13,7 @@ import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty } from 'class-validator';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Type } from 'class-transformer';
-import { Billboard } from '../billboard/billboard.entity';
+import { CustomerBillboard } from '../customerBillboard/customerBillboard.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -44,11 +44,11 @@ export class Customer extends BaseEntity {
   npwp: string;
 
   @OneToMany(
-    () => Billboard,
-    billboard => billboard.customer,
+    () => CustomerBillboard,
+    customer_billboard => customer_billboard.customer,
   )
-  @Type(() => Billboard)
-  billboards: Billboard[];
+  @Type(() => CustomerBillboard)
+  customer_billboards: CustomerBillboard[];
 
   @BeforeInsert()
   protected beforeInsert(): void {

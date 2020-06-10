@@ -1,12 +1,12 @@
 import { Controller } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
-import { Category } from './category.entity';
+import { SubDistrict } from './subdistrict.entity';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
-import { CategoryService } from './category.service';
+import { SubDistrictService } from './subdistrict.service';
 
 @Crud({
   model: {
-    type: Category,
+    type: SubDistrict,
   },
   params: {
     id: {
@@ -17,19 +17,19 @@ import { CategoryService } from './category.service';
   },
   query: {
     join: {
-      locationcategories: {
+      customer_billboards: {
         exclude: [],
       },
     },
   },
 })
-@ApiUseTags('Categories')
-@Controller('categories')
+@ApiUseTags('SubDistricts')
+@Controller('subDistricts')
 // @ApiBearerAuth()
-export class CategoryController implements CrudController<Category> {
-  constructor(public service: CategoryService) {}
+export class SubDistrictController implements CrudController<SubDistrict> {
+  constructor(public service: SubDistrictService) {}
 
-  get base(): CrudController<Category> {
+  get base(): CrudController<SubDistrict> {
     return this;
   }
 }

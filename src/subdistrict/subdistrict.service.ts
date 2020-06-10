@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LocationDetail } from './location-detail.entity';
+import { SubDistrict } from './subdistrict.entity';
 import { getConnection } from 'typeorm';
 
 @Injectable()
-export class LocationDetailService extends TypeOrmCrudService<
-  LocationDetail
+export class SubDistrictService extends TypeOrmCrudService<
+  SubDistrict
 > {
-  constructor(@InjectRepository(LocationDetail) repo) {
+  constructor(@InjectRepository(SubDistrict) repo) {
     super(repo);
   }
 }

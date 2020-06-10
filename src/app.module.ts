@@ -11,9 +11,8 @@ import { UserModule } from './user/user.module';
 import * as migrations from './migrations/index';
 import { CustomerModule } from 'customer/customer.module';
 import { BillboardModule } from 'billboard/billboard.module';
-import { CategoryModule } from 'category/category.module';
-import { LocationCategoryModule } from 'category/location-category/location-category.module';
-import { LocationDetailModule } from 'category/location-category/location-detail/location-detail.module';
+import { SubDistrictModule } from 'subdistrict/subdistrict.module';
+import { CustomerBillboardModule } from 'customerBillboard/customerBillboard.module';
 
 const { parsed } = dotenv.config({
   path:
@@ -44,14 +43,13 @@ process.env = { ...process.env, ...parsed };
       cli: {
         migrationsDir: __dirname + '/migrations',
       },
-      migrations: [migrations.InitDB1589295632780],
+      migrations: [migrations.InitDB1591768539227],
     }),
     UserModule,
     CustomerModule,
     BillboardModule,
-    CategoryModule,
-    LocationCategoryModule,
-    LocationDetailModule,
+    SubDistrictModule,
+    CustomerBillboardModule,
   ],
   controllers: [AppController],
   providers: [

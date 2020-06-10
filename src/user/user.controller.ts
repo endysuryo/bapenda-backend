@@ -17,7 +17,7 @@ import { UserService } from './user.service';
   },
   query: {
     join: {
-      billboards: {
+      customer_billboards: {
         exclude: [],
       },
     },

@@ -17,7 +17,7 @@ import { CustomerService } from './customer.service';
   },
   query: {
     join: {
-      billboards: {
+      customer_billboards: {
         exclude: [],
       },
     },
