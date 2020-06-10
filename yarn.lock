@@ -287,6 +287,11 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@js-random/number@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@js-random/number/-/number-0.3.5.tgz#f3ec34ff5bf0836e8b233ce28ce3b3839a6af8a9"
+  integrity sha512-k1n/1M9CLuTMl7R0I6Fky+EwPBfmK+b+au1xpgKNJOv466DkLURU/4HHQ+KOe9Hsgw6O/vM7guEnu53JspWbWA==
+
 "@nestjs/common@^6.10.10":
   version "6.10.14"
   resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.10.14.tgz#559d513a7ad1765f8516abac9754af80674cfefc"
@@ -5392,6 +5397,11 @@ querystring@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
+
+random-int@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/random-int/-/random-int-2.0.1.tgz#d072fe298e2fd12a730edde7729168b7b88dcea3"
+  integrity sha512-YALjWK2Rt9EMIv9BF/3mvlzFWQathsvb5UZmN1QmhfIOfcQYXc/UcLzg0ablqesSBpBVLt2Tlwv/eTuBh4LXUQ==
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"

@@ -1,8 +1,10 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, HttpException, Body, Post } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { CustomerBillboard } from './customerBillboard.entity';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CustomerBillboardService } from './customerBillboard.service';
+import { get } from 'http';
+import { CentroidDto } from './customerBillboard.dto';
 
 @Crud({
   model: {
@@ -41,4 +43,19 @@ export class CustomerBillboardController implements CrudController<CustomerBillb
   get base(): CrudController<CustomerBillboard> {
     return this;
   }
+
+  @Post('kmeans/generate')
+  async generateAllKmeans(
+    @Body() dto: CentroidDto,
+    ) {
+    try {
+      return this.service.generateAllKmeans(dto);
+    } catch (err) {
+      throw new HttpException(
+        err.message || err,
+        err.statusCode || err.status || 500,
+      );
+    }
+  }
+
 }
