@@ -21,6 +21,7 @@ export class CustomerBillboardService extends TypeOrmCrudService<
       const centroidData = dto;
       const tempCluster = [];
 
+      // first step
       for (const dataCluster of fetchAllData) {
         const clusterValue1 = Math.sqrt(
           Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_1.subdistrict_weight), 2)
@@ -61,11 +62,85 @@ export class CustomerBillboardService extends TypeOrmCrudService<
         tempCluster.push(fisrtStepCluster);
       }
 
-      // define new centroid
+      const newCentroid = {};
 
-      return tempCluster;
+      // define new centroid
+      return await this.createNewCentroid(tempCluster);
+
     } catch (err) {
       return Promise.reject(err);
     }
+  }
+
+  async createNewCentroid(dto: any): Promise<any> {
+    const tempCluster = dto;
+
+    const arrayFilter1 = [];
+    const arrayFilter2 = [];
+    const arrayFilter3 = [];
+
+    for (const filterCluster of tempCluster) {
+      if (filterCluster.minimum_cluster === 1) {
+        arrayFilter1.push(filterCluster);
+      } else if (filterCluster.minimum_cluster === 2) {
+        arrayFilter2.push(filterCluster);
+      } else if (filterCluster.minimum_cluster === 3) {
+        arrayFilter3.push(filterCluster);
+      }
+    }
+
+    const cluster1 = {
+      subdistrict_weight: 0,
+      billboard_total: 0,
+      billboard_weight: 0,
+    };
+    const cluster2 = {
+      subdistrict_weight: 0,
+      billboard_total: 0,
+      billboard_weight: 0,
+    };
+    const cluster3 = {
+      subdistrict_weight: 0,
+      billboard_total: 0,
+      billboard_weight: 0,
+    };
+
+    for (const firstCluster of arrayFilter1) {
+      cluster1.subdistrict_weight = cluster1.subdistrict_weight + firstCluster.subdistrict_weight;
+      cluster1.billboard_total = cluster1.billboard_total + firstCluster.billboard_total;
+      cluster1.billboard_weight = cluster1.billboard_weight + firstCluster.billboard_weight;
+    }
+
+    cluster1.subdistrict_weight = cluster1.subdistrict_weight / arrayFilter1.length;
+    cluster1.billboard_total = cluster1.billboard_total / arrayFilter1.length;
+    cluster1.billboard_weight = cluster1.billboard_weight / arrayFilter1.length;
+
+    for (const secondCluster of arrayFilter2) {
+      cluster2.subdistrict_weight = cluster2.subdistrict_weight + secondCluster.subdistrict_weight;
+      cluster2.billboard_total = cluster2.billboard_total + secondCluster.billboard_total;
+      cluster2.billboard_weight = cluster2.billboard_weight + secondCluster.billboard_weight;
+    }
+
+    cluster2.subdistrict_weight = cluster2.subdistrict_weight / arrayFilter2.length;
+    cluster2.billboard_total = cluster2.billboard_total / arrayFilter2.length;
+    cluster2.billboard_weight = cluster2.billboard_weight / arrayFilter2.length;
+
+    for (const thrithCluster of arrayFilter3) {
+      cluster3.subdistrict_weight = cluster3.subdistrict_weight + thrithCluster.subdistrict_weight;
+      cluster3.billboard_total = cluster3.billboard_total + thrithCluster.billboard_total;
+      cluster3.billboard_weight = cluster3.billboard_weight + thrithCluster.billboard_weight;
+    }
+
+    cluster3.subdistrict_weight = cluster3.subdistrict_weight / arrayFilter3.length;
+    cluster3.billboard_total = cluster3.billboard_total / arrayFilter3.length;
+    cluster3.billboard_weight = cluster3.billboard_weight / arrayFilter3.length;
+
+    const clusterResult = {
+      cluster_1: cluster1,
+      cluster_2: cluster2,
+      cluster_3: cluster3,
+    };
+
+    return clusterResult;
   }
 }
