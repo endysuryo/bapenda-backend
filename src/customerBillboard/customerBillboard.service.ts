@@ -62,8 +62,6 @@ export class CustomerBillboardService extends TypeOrmCrudService<
         tempCluster.push(fisrtStepCluster);
       }
 
-      const newCentroid = {};
-
       // define new centroid
       return await this.createNewCentroid(tempCluster);
 
@@ -125,10 +123,10 @@ export class CustomerBillboardService extends TypeOrmCrudService<
     cluster2.billboard_total = cluster2.billboard_total / arrayFilter2.length;
     cluster2.billboard_weight = cluster2.billboard_weight / arrayFilter2.length;
 
-    for (const thrithCluster of arrayFilter3) {
-      cluster3.subdistrict_weight = cluster3.subdistrict_weight + thrithCluster.subdistrict_weight;
-      cluster3.billboard_total = cluster3.billboard_total + thrithCluster.billboard_total;
-      cluster3.billboard_weight = cluster3.billboard_weight + thrithCluster.billboard_weight;
+    for (const thirdCluster of arrayFilter3) {
+      cluster3.subdistrict_weight = cluster3.subdistrict_weight + thirdCluster.subdistrict_weight;
+      cluster3.billboard_total = cluster3.billboard_total + thirdCluster.billboard_total;
+      cluster3.billboard_weight = cluster3.billboard_weight + thirdCluster.billboard_weight;
     }
 
     cluster3.subdistrict_weight = cluster3.subdistrict_weight / arrayFilter3.length;
