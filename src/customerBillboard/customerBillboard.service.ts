@@ -63,7 +63,28 @@ export class CustomerBillboardService extends TypeOrmCrudService<
       }
 
       // define new centroid
-      return await this.createNewCentroid(tempCluster);
+      const newCentroid =  await this.createNewCentroid(tempCluster);
+
+      // second step
+      for (const dataCluster of fetchAllData) {
+        const clusterValue1 = Math.sqrt(
+          Math.pow((dataCluster.subdistrict_weight - newCentroid.cluster_1.subdistrict_weight), 2)
+          + Math.pow((dataCluster.billboard_total - newCentroid.cluster_1.billboard_total), 2)
+          + Math.pow((dataCluster.billboard_weight - newCentroid.cluster_1.billboard_weight), 2),
+        );
+        const clusterValue2 = Math.sqrt(
+          Math.pow((dataCluster.subdistrict_weight - newCentroid.cluster_2.subdistrict_weight), 2)
+          + Math.pow((dataCluster.billboard_total - newCentroid.cluster_2.billboard_total), 2)
+          + Math.pow((dataCluster.billboard_weight - newCentroid.cluster_2.billboard_weight), 2),
+        );
+        const clusterValue3 = Math.sqrt(
+          Math.pow((dataCluster.subdistrict_weight - newCentroid.cluster_3.subdistrict_weight), 2)
+          + Math.pow((dataCluster.billboard_total - newCentroid.cluster_3.billboard_total), 2)
+          + Math.pow((dataCluster.billboard_weight - newCentroid.cluster_3.billboard_weight), 2),
+        );
+      }
+
+      // #need new function after get cluster value
 
     } catch (err) {
       return Promise.reject(err);
