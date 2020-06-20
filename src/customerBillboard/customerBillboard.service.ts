@@ -19,73 +19,40 @@ export class CustomerBillboardService extends TypeOrmCrudService<
       .getMany();
 
       const centroidData = dto;
-      const tempCluster = [];
 
-      // first step
-      for (const dataCluster of fetchAllData) {
-        const clusterValue1 = Math.sqrt(
-          Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_1.subdistrict_weight), 2)
-          + Math.pow((dataCluster.billboard_total - centroidData.cluster_1.billboard_total), 2)
-          + Math.pow((dataCluster.billboard_weight - centroidData.cluster_1.billboard_weight), 2),
-        );
-        const clusterValue2 = Math.sqrt(
-          Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_2.subdistrict_weight), 2)
-          + Math.pow((dataCluster.billboard_total - centroidData.cluster_2.billboard_total), 2)
-          + Math.pow((dataCluster.billboard_weight - centroidData.cluster_2.billboard_weight), 2),
-        );
-        const clusterValue3 = Math.sqrt(
-          Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_3.subdistrict_weight), 2)
-          + Math.pow((dataCluster.billboard_total - centroidData.cluster_3.billboard_total), 2)
-          + Math.pow((dataCluster.billboard_weight - centroidData.cluster_3.billboard_weight), 2),
-        );
-
-        const compareValue = Math.min(clusterValue1, clusterValue2, clusterValue3);
-
-        let numberOfCluster = 0;
-
-        if (compareValue === clusterValue1) {
-          numberOfCluster = 1;
-        } else if (compareValue === clusterValue2) {
-          numberOfCluster = 2;
-        } else {
-          numberOfCluster = 3;
-        }
-
-        const fisrtStepCluster = {
-          ...dataCluster,
-          data_cluster1: clusterValue1,
-          data_cluster2: clusterValue2,
-          data_cluster3: clusterValue3,
-          minimum_cluster: numberOfCluster,
-        };
-
-        tempCluster.push(fisrtStepCluster);
-      }
-
+      // math from centroidData
+      const defineFirstCluster = await this.mathCluster(fetchAllData, centroidData);
       // define new centroid
-      const newCentroid =  await this.createNewCentroid(tempCluster);
+      const newCentroid =  await this.createNewCentroid(defineFirstCluster);
+      // math from newCentroid
+      const defineSecondCluster = await this.mathCluster(fetchAllData, newCentroid);
 
-      // second step
-      for (const dataCluster of fetchAllData) {
-        const clusterValue1 = Math.sqrt(
-          Math.pow((dataCluster.subdistrict_weight - newCentroid.cluster_1.subdistrict_weight), 2)
-          + Math.pow((dataCluster.billboard_total - newCentroid.cluster_1.billboard_total), 2)
-          + Math.pow((dataCluster.billboard_weight - newCentroid.cluster_1.billboard_weight), 2),
-        );
-        const clusterValue2 = Math.sqrt(
-          Math.pow((dataCluster.subdistrict_weight - newCentroid.cluster_2.subdistrict_weight), 2)
-          + Math.pow((dataCluster.billboard_total - newCentroid.cluster_2.billboard_total), 2)
-          + Math.pow((dataCluster.billboard_weight - newCentroid.cluster_2.billboard_weight), 2),
-        );
-        const clusterValue3 = Math.sqrt(
-          Math.pow((dataCluster.subdistrict_weight - newCentroid.cluster_3.subdistrict_weight), 2)
-          + Math.pow((dataCluster.billboard_total - newCentroid.cluster_3.billboard_total), 2)
-          + Math.pow((dataCluster.billboard_weight - newCentroid.cluster_3.billboard_weight), 2),
-        );
+      // compare cluster
+      const clusterCheck = await this.clusterCheck(defineFirstCluster, defineSecondCluster);
+
+      if (clusterCheck === true) {
+        return defineFirstCluster;
       }
 
-      // #need new function after get cluster value
+      let tempPrimaryCluster = defineSecondCluster;
+      let tempCentroid: any;
+      let tempSecondaryCluster: any;
+      let returnCheck: boolean;
 
+      // do this if return false
+      do {
+        tempCentroid = await this.createNewCentroid(tempPrimaryCluster);
+        tempSecondaryCluster = await this.mathCluster(fetchAllData, tempCentroid);
+        const doCluserCheck =  await this.clusterCheck(tempPrimaryCluster, tempSecondaryCluster);
+        returnCheck = doCluserCheck;
+        if (returnCheck === false) {
+          tempPrimaryCluster = [];
+          tempPrimaryCluster = tempSecondaryCluster;
+        } else {
+          return tempSecondaryCluster;
+        }
+        console.info('hasil do : ', returnCheck);
+      } while (!returnCheck);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -161,5 +128,70 @@ export class CustomerBillboardService extends TypeOrmCrudService<
     };
 
     return clusterResult;
+  }
+
+  async mathCluster(dtoData: any, dtoCentroid: any) {
+    const sqlData: any = dtoData;
+    const centroidData: any = dtoCentroid;
+    const resClusterData: any = [];
+
+    for (const dataCluster of sqlData) {
+      const clusterValue1 = Math.sqrt(
+        Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_1.subdistrict_weight), 2)
+        + Math.pow((dataCluster.billboard_total - centroidData.cluster_1.billboard_total), 2)
+        + Math.pow((dataCluster.billboard_weight - centroidData.cluster_1.billboard_weight), 2),
+      );
+      const clusterValue2 = Math.sqrt(
+        Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_2.subdistrict_weight), 2)
+        + Math.pow((dataCluster.billboard_total - centroidData.cluster_2.billboard_total), 2)
+        + Math.pow((dataCluster.billboard_weight - centroidData.cluster_2.billboard_weight), 2),
+      );
+      const clusterValue3 = Math.sqrt(
+        Math.pow((dataCluster.subdistrict_weight - centroidData.cluster_3.subdistrict_weight), 2)
+        + Math.pow((dataCluster.billboard_total - centroidData.cluster_3.billboard_total), 2)
+        + Math.pow((dataCluster.billboard_weight - centroidData.cluster_3.billboard_weight), 2),
+      );
+
+      const compareValue = Math.min(clusterValue1, clusterValue2, clusterValue3);
+
+      let numberOfCluster = 0;
+
+      if (compareValue === clusterValue1) {
+        numberOfCluster = 1;
+      } else if (compareValue === clusterValue2) {
+        numberOfCluster = 2;
+      } else {
+        numberOfCluster = 3;
+      }
+
+      const secondStepCluster = {
+        ...dataCluster,
+        data_cluster1: clusterValue1,
+        data_cluster2: clusterValue2,
+        data_cluster3: clusterValue3,
+        minimum_cluster: numberOfCluster,
+      };
+
+      resClusterData.push(secondStepCluster);
+    }
+
+    return resClusterData;
+
+  }
+
+  async clusterCheck(dtoFirstCluster: any, dtoSecondCluster: any): Promise<boolean> {
+    let returnValue: boolean;
+    for (const firstCluster of dtoFirstCluster) {
+      const secondCluster = dtoSecondCluster.find(el => el.id === firstCluster.id);
+      if (firstCluster.minimum_cluster === secondCluster.minimum_cluster) {
+        returnValue = true;
+        console.info('comparing : ', true);
+      } else {
+        returnValue = true;
+        console.info('comparing: ', false);
+        return returnValue;
+      }
+    }
+    return returnValue;
   }
 }
