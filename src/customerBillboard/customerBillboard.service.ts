@@ -31,6 +31,8 @@ export class CustomerBillboardService extends TypeOrmCrudService<
     try {
       const fetchAllData = await this.repo
       .createQueryBuilder('customerBillboard')
+      .where('customerBillboard.created_at >= :start_at', { start_at: dto.start_date })
+      .andWhere('customerBillboard.created_at <= :end_at', { end_at: dto.end_date })
       .getMany();
 
       const centroidData = dto;
