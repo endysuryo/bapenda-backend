@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerBillboard } from './customerBillboard.entity';
-import { getConnection } from 'typeorm';
+import { getConnection, Between } from 'typeorm';
 
 @Injectable()
 export class CustomerBillboardService extends TypeOrmCrudService<
@@ -10,6 +10,21 @@ export class CustomerBillboardService extends TypeOrmCrudService<
 > {
   constructor(@InjectRepository(CustomerBillboard) repo) {
     super(repo);
+  }
+
+  async getByDate(dto: any): Promise<any> {
+    try {
+      const dataDto: any = dto;
+      const getByDate = await this.repo
+      .createQueryBuilder('customerBillboard')
+      .where('customerBillboard.created_at >= :start_at', { start_at: dto.start_date })
+      .andWhere('customerBillboard.created_at <= :end_at', { end_at: dto.end_date })
+      .getMany();
+
+      return getByDate;
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 
   async generateAllKmeans(dto: any): Promise<any> {

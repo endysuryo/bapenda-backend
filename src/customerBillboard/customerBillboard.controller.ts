@@ -58,4 +58,23 @@ export class CustomerBillboardController implements CrudController<CustomerBillb
     }
   }
 
+  @Get('start/:start_date/end/:end_date')
+  async getByDate(
+    @Param('start_date') start_date: string,
+    @Param('end_date') end_date: string,
+  ) {
+    try {
+      const dto: any =  {
+        start_date,
+        end_date,
+      };
+      return this.service.getByDate(dto);
+    } catch (err) {
+      throw new HttpException(
+        err.message || err,
+        err.statusCode || err.status || 500,
+      );
+    }
+  }
+
 }
