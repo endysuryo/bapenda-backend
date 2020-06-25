@@ -54,7 +54,7 @@ export class CustomerBillboardService extends TypeOrmCrudService<
       const clusterCheck = await this.clusterCheck(defineFirstCluster, defineSecondCluster);
 
       if (clusterCheck === true) {
-        return defineFirstCluster;
+        return defineSecondCluster;
       }
 
       let tempPrimaryCluster = defineSecondCluster;
