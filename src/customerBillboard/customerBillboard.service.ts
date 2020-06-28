@@ -57,6 +57,8 @@ export class CustomerBillboardService extends TypeOrmCrudService<
         return defineSecondCluster;
       }
 
+      console.info('check : ', clusterCheck);
+
       let tempPrimaryCluster = defineSecondCluster;
       let tempCentroid: any;
       let tempSecondaryCluster: any;
@@ -64,14 +66,17 @@ export class CustomerBillboardService extends TypeOrmCrudService<
 
       // do this if return false
       do {
+        console.info('loop start');
         tempCentroid = await this.createNewCentroid(tempPrimaryCluster);
         tempSecondaryCluster = await this.mathCluster(fetchAllData, tempCentroid);
         const doCluserCheck =  await this.clusterCheck(tempPrimaryCluster, tempSecondaryCluster);
         returnCheck = doCluserCheck;
         if (returnCheck === false) {
+          console.info('will loop again');
           tempPrimaryCluster = [];
           tempPrimaryCluster = tempSecondaryCluster;
         } else {
+          console.info('will stop loop');
           return tempSecondaryCluster;
         }
         console.info('hasil do : ', returnCheck);
@@ -210,7 +215,7 @@ export class CustomerBillboardService extends TypeOrmCrudService<
         returnValue = true;
         console.info('comparing : ', true);
       } else {
-        returnValue = true;
+        returnValue = false;
         console.info('comparing: ', false);
         return returnValue;
       }
