@@ -16,13 +16,19 @@ export class CustomerBillboardService extends TypeOrmCrudService<
     try {
       const dataDto: any = dto;
       const getByDate = await this.repo
-      .createQueryBuilder('customerBillboard')
-      .where('customerBillboard.created_at >= :start_at', { start_at: dto.start_date })
-      .andWhere('customerBillboard.created_at <= :end_at', { end_at: dto.end_date })
-      .leftJoinAndSelect('customerBillboard.customer', 'customer')
-      .leftJoinAndSelect('customerBillboard.billboard', 'billboard')
-      .leftJoinAndSelect('customerBillboard.subdistrict', 'subdistrict')
-      .getMany();
+        .createQueryBuilder('customerBillboard')
+        .select('customerBillboard.id', 'id')
+        .addSelect('customerBillboard.subdistrict_weight', 'subdistrict_weight')
+        .addSelect('customerBillboard.billboard_weight', 'billboard_weight')
+        .addSelect('SUM(customerBillboard.billboard_total)', 'billboard_total')
+        .where('customerBillboard.created_at >= :start_at', { start_at: dto.start_date })
+        .andWhere('customerBillboard.created_at <= :end_at', { end_at: dto.end_date })
+        .leftJoinAndSelect('customerBillboard.customer', 'customer')
+        .leftJoinAndSelect('customerBillboard.billboard', 'billboard')
+        .leftJoinAndSelect('customerBillboard.subdistrict', 'subdistrict')
+        .groupBy('customerBillboard.subdistrict_id')
+        .addGroupBy('customerBillboard.billboard_weight')
+        .getRawMany();
 
       return getByDate;
     } catch (err) {
@@ -34,12 +40,18 @@ export class CustomerBillboardService extends TypeOrmCrudService<
     try {
       const fetchAllData = await this.repo
         .createQueryBuilder('customerBillboard')
+        .select('customerBillboard.id', 'id')
+        .addSelect('customerBillboard.subdistrict_weight', 'subdistrict_weight')
+        .addSelect('customerBillboard.billboard_weight', 'billboard_weight')
+        .addSelect('SUM(customerBillboard.billboard_total)', 'billboard_total')
         .where('customerBillboard.created_at >= :start_at', { start_at: dto.start_date })
         .andWhere('customerBillboard.created_at <= :end_at', { end_at: dto.end_date })
         .leftJoinAndSelect('customerBillboard.customer', 'customer')
         .leftJoinAndSelect('customerBillboard.billboard', 'billboard')
         .leftJoinAndSelect('customerBillboard.subdistrict', 'subdistrict')
-        .getMany();
+        .groupBy('customerBillboard.subdistrict_id')
+        .addGroupBy('customerBillboard.billboard_weight')
+        .getRawMany();
 
       const centroidData = dto;
 
