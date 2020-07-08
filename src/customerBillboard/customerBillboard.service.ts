@@ -3,6 +3,7 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerBillboard } from './customerBillboard.entity';
 import { getConnection, Between } from 'typeorm';
+import { LOADIPHLPAPI } from 'dns';
 
 @Injectable()
 export class CustomerBillboardService extends TypeOrmCrudService<
@@ -65,8 +66,13 @@ export class CustomerBillboardService extends TypeOrmCrudService<
       // compare cluster
       const clusterCheck = await this.clusterCheck(defineFirstCluster, defineSecondCluster);
 
+      let loopTotal: number = 2;
       if (clusterCheck === true) {
-        return defineSecondCluster;
+        const returnData: any = {
+          data: defineSecondCluster,
+          loop_total: loopTotal,
+        };
+        return returnData;
       }
 
       console.info('check : ', clusterCheck);
@@ -78,6 +84,7 @@ export class CustomerBillboardService extends TypeOrmCrudService<
 
       // do this if return false
       do {
+        loopTotal = loopTotal + 2;
         console.info('loop start');
         tempCentroid = await this.createNewCentroid(tempPrimaryCluster);
         tempSecondaryCluster = await this.mathCluster(fetchAllData, tempCentroid);
@@ -89,7 +96,11 @@ export class CustomerBillboardService extends TypeOrmCrudService<
           tempPrimaryCluster = tempSecondaryCluster;
         } else {
           console.info('will stop loop');
-          return tempSecondaryCluster;
+          const returnData: any = {
+            data: tempSecondaryCluster,
+            loop_total: loopTotal,
+          };
+          return returnData;
         }
         console.info('hasil do : ', returnCheck);
       } while (!returnCheck);
