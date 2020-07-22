@@ -66,7 +66,7 @@ export class CustomerBillboardService extends TypeOrmCrudService<
       // compare cluster
       const clusterCheck = await this.clusterCheck(defineFirstCluster, defineSecondCluster);
 
-      let loopTotal: number = 2;
+      let loopTotal: number = 1;
       if (clusterCheck === true) {
         const returnData: any = {
           data: defineSecondCluster,
@@ -84,7 +84,7 @@ export class CustomerBillboardService extends TypeOrmCrudService<
 
       // do this if return false
       do {
-        loopTotal = loopTotal + 2;
+        loopTotal = loopTotal + 1;
         console.info('loop start');
         tempCentroid = await this.createNewCentroid(tempPrimaryCluster);
         tempSecondaryCluster = await this.mathCluster(fetchAllData, tempCentroid);
