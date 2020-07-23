@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,6 +13,12 @@ import { CustomerModule } from 'customer/customer.module';
 import { BillboardModule } from 'billboard/billboard.module';
 import { SubDistrictModule } from 'subdistrict/subdistrict.module';
 import { CustomerBillboardModule } from 'customerBillboard/customerBillboard.module';
+import { AuthMiddleware } from 'middleware';
+import { CustomerController } from 'customer/customer.controller';
+import { BillboardController } from 'billboard/billboard.controller';
+import { CustomerBillboardController } from 'customerBillboard/customerBillboard.controller';
+import { SubDistrictController } from 'subdistrict/subdistrict.controller';
+import { UserController } from 'user/user.controller';
 
 const { parsed } = dotenv.config({
   path:
@@ -60,4 +66,17 @@ process.env = { ...process.env, ...parsed };
     AppService,
   ],
 })
-export class AppModule {}
+
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        UserController,
+        CustomerController,
+        BillboardController,
+        CustomerBillboardController,
+        SubDistrictController,
+      );
+  }
+}
