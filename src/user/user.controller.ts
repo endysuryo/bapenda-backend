@@ -1,8 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { User } from './user.entity';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
+import { AuthGuard } from '../security/auth.guard';
 
 @Crud({
   model: {
@@ -25,10 +26,10 @@ import { UserService } from './user.service';
 })
 @ApiUseTags('Users')
 @Controller('users')
-// @ApiBearerAuth()
+@UseGuards(new AuthGuard())
+@ApiBearerAuth()
 export class UserController implements CrudController<User> {
   constructor(public service: UserService) {}
-
   get base(): CrudController<User> {
     return this;
   }
