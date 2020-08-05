@@ -3,7 +3,7 @@ import { Crud, CrudController } from '@nestjsx/crud';
 import { User } from './user.entity';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { AuthGuard } from '../security/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Crud({
   model: {
